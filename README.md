@@ -1,5 +1,3 @@
-
-
 Reddit, much like other social media platforms, provides a way for users to communicate their interests etc. For this exercise, we would like to see you build an application that listens to your choice of subreddits 
 (best to choose one with a good amount of posts). You can use this link to help identify one that interests you. We'd like to see this as a .NET 6/7 application, and you are free to use any 3rd party libraries you would like.
 
@@ -28,8 +26,3 @@ To get the API, register here https://www.reddit.com/wiki/api/
 https://redditcharts.com/
 
 https://www.reddit.com/dev/api/
-
-
-
-andrustaylor90@gmail.com
-@Paul20010724
