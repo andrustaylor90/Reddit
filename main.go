@@ -8,12 +8,25 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
+
+	"github.com/joho/godotenv"
 )
 
 func main() {
-	clientID := "MnqvvrkYBC8TYjVMxbb37A"
-	clientSecret := "ko05fJ_Mpz0zkqf2ZoFf3LBrP5r4Bw"
-	redirectURI := "https://localhost/token"
+
+	err := godotenv.Load()
+	if err != nil {
+		// Handle error
+		panic("Error loading .env file")
+	}
+
+	// clientID := "MnqvvrkYBC8TYjVMxbb37A"
+	// clientSecret := "ko05fJ_Mpz0zkqf2ZoFf3LBrP5r4Bw"
+	// redirectURI := "https://localhost/token"
+
+	clientID := os.Getenv("CLIENT_ID")
+	clientSecret := os.Getenv("CLIENT_SECRET")
+	redirectURI := os.Getenv("REDIRECT_URI")
 
 	redditClient := reddit.NewClient("https://oauth.reddit.com", clientID, clientSecret, redirectURI)
 

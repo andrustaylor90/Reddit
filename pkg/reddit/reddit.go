@@ -20,11 +20,11 @@ const (
 )
 
 type Client struct {
-	httpClient  *http.Client
-	baseURL     string
-	config      *oauth2.Config
-	token       *oauth2.Token
-	PostsByUser map[string]int
+	httpClient *http.Client
+	baseURL    string
+	config     *oauth2.Config
+	token      *oauth2.Token
+	Statistics *Statistics
 }
 
 func NewClient(baseURL, clientID, clientSecret, redirectURI string) *Client {
@@ -37,7 +37,7 @@ func NewClient(baseURL, clientID, clientSecret, redirectURI string) *Client {
 			RedirectURL:  redirectURI,
 			Scopes:       []string{"read"},
 		},
-		PostsByUser: make(map[string]int),
+		Statistics: NewStatistics(),
 	}
 }
 
@@ -145,6 +145,7 @@ func (c *Client) GetPosts(ctx context.Context, subreddit string) ([]Post, error)
 	var posts []Post
 	for _, child := range response.Data.Children {
 		posts = append(posts, child.Data)
+		c.Statistics.Update(child.Data) // Update statistics for each post
 	}
 
 	return posts, nil

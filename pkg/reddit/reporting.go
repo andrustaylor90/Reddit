@@ -3,27 +3,34 @@ package reddit
 import (
 	"context"
 	"fmt"
-	"sync"
 	"time"
 )
 
 func (c *Client) ProcessPosts(ctx context.Context, subreddit string) {
-	var mu sync.Mutex
-
-	go c.ReportStatistics()
+	go c.ReportStatistics(ctx)
 
 	for {
 		fmt.Println("fetching-posts")
-		posts, err := c.GetPosts(ctx, subreddit)
+		_, err := c.GetPosts(ctx, subreddit)
 		if err != nil {
 			fmt.Println(err)
 			continue
 		}
 
-		mu.Lock()
-		c.UpdateStatistics(posts)
-		mu.Unlock()
-
 		time.Sleep(1 * time.Minute)
+	}
+}
+
+func (c *Client) ReportStatistics(ctx context.Context) {
+	ticker := time.NewTicker(2 * time.Second)
+	defer ticker.Stop()
+
+	for {
+		select {
+		case <-ticker.C:
+			c.Statistics.Report()
+		case <-ctx.Done():
+			return
+		}
 	}
 }
